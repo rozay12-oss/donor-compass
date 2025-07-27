@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Heart, Menu, Bell, User, Search } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 interface HeaderProps {
   userRole: 'admin' | 'hospital' | 'donor' | 'patient';
@@ -44,11 +45,32 @@ export const Header = ({ userRole, userName, onRoleChange }: HeaderProps) => {
 
           {/* Center Navigation (Desktop) */}
           <nav className="hidden md:flex items-center space-x-8">
-            <Button variant="ghost" size="sm">Dashboard</Button>
-            <Button variant="ghost" size="sm">Inventory</Button>
-            <Button variant="ghost" size="sm">Donors</Button>
-            <Button variant="ghost" size="sm">Requests</Button>
-            <Button variant="ghost" size="sm">Reports</Button>
+            <Link to="/">
+              <Button variant="ghost" size="sm">Dashboard</Button>
+            </Link>
+            {userRole === 'donor' && (
+              <Link to="/donor-registration">
+                <Button variant="ghost" size="sm">Register</Button>
+              </Link>
+            )}
+            {(userRole === 'hospital' || userRole === 'patient') && (
+              <Link to="/blood-request">
+                <Button variant="ghost" size="sm">Request Blood</Button>
+              </Link>
+            )}
+            {userRole === 'patient' && (
+              <Link to="/patient-portal">
+                <Button variant="ghost" size="sm">My Portal</Button>
+              </Link>
+            )}
+            {userRole === 'admin' && (
+              <Link to="/admin">
+                <Button variant="ghost" size="sm">Admin Panel</Button>
+              </Link>
+            )}
+            <Link to="/login">
+              <Button variant="ghost" size="sm">Login</Button>
+            </Link>
           </nav>
 
           {/* Right Side Actions */}
@@ -106,11 +128,32 @@ export const Header = ({ userRole, userName, onRoleChange }: HeaderProps) => {
         {/* Mobile Menu */}
         {isMenuOpen && (
           <Card className="md:hidden mt-2 p-4 space-y-2">
-            <Button variant="ghost" size="sm" className="w-full justify-start">Dashboard</Button>
-            <Button variant="ghost" size="sm" className="w-full justify-start">Inventory</Button>
-            <Button variant="ghost" size="sm" className="w-full justify-start">Donors</Button>
-            <Button variant="ghost" size="sm" className="w-full justify-start">Requests</Button>
-            <Button variant="ghost" size="sm" className="w-full justify-start">Reports</Button>
+            <Link to="/">
+              <Button variant="ghost" size="sm" className="w-full justify-start">Dashboard</Button>
+            </Link>
+            {userRole === 'donor' && (
+              <Link to="/donor-registration">
+                <Button variant="ghost" size="sm" className="w-full justify-start">Register</Button>
+              </Link>
+            )}
+            {(userRole === 'hospital' || userRole === 'patient') && (
+              <Link to="/blood-request">
+                <Button variant="ghost" size="sm" className="w-full justify-start">Request Blood</Button>
+              </Link>
+            )}
+            {userRole === 'patient' && (
+              <Link to="/patient-portal">
+                <Button variant="ghost" size="sm" className="w-full justify-start">My Portal</Button>
+              </Link>
+            )}
+            {userRole === 'admin' && (
+              <Link to="/admin">
+                <Button variant="ghost" size="sm" className="w-full justify-start">Admin Panel</Button>
+              </Link>
+            )}
+            <Link to="/login">
+              <Button variant="ghost" size="sm" className="w-full justify-start">Login</Button>
+            </Link>
             <div className="pt-2 border-t border-border">
               <select 
                 value={userRole}

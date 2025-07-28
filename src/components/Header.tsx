@@ -64,7 +64,7 @@ export const Header = ({ userRole, userName, onRoleChange }: HeaderProps) => {
               </Link>
             )}
             {userRole === 'admin' && (
-              <Link to="/admin">
+              <Link to="/admin-dashboard">
                 <Button variant="ghost" size="sm">Admin Panel</Button>
               </Link>
             )}
@@ -147,7 +147,7 @@ export const Header = ({ userRole, userName, onRoleChange }: HeaderProps) => {
               </Link>
             )}
             {userRole === 'admin' && (
-              <Link to="/admin">
+              <Link to="/admin-dashboard">
                 <Button variant="ghost" size="sm" className="w-full justify-start">Admin Panel</Button>
               </Link>
             )}

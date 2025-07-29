@@ -1,5 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Header } from '@/components/Header';
+import { useAuth } from '@/hooks/useAuth';
+import { supabase } from '@/integrations/supabase/client';
+import { Link } from 'react-router-dom';
 import { StatsCard } from '@/components/StatsCard';
 import { BloodInventoryTable } from '@/components/BloodInventoryTable';
 import { RecentActivity } from '@/components/RecentActivity';
@@ -16,8 +19,33 @@ import {
 } from 'lucide-react';
 
 const Index = () => {
-  const [userRole, setUserRole] = useState<'admin' | 'hospital' | 'donor' | 'patient'>('admin');
-  const [userName] = useState('Dr. Sarah Johnson');
+  const { user } = useAuth();
+  const [userRole, setUserRole] = useState<'admin' | 'hospital' | 'donor' | 'patient'>('donor');
+  const [userName, setUserName] = useState('Guest User');
+  const [profile, setProfile] = useState<any>(null);
+
+  // Fetch user profile data
+  useEffect(() => {
+    const fetchProfile = async () => {
+      if (user) {
+        const { data } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('user_id', user.id)
+          .single();
+        
+        if (data) {
+          setProfile(data);
+          setUserName(data.full_name || user.email || 'User');
+          if (data.role && ['admin', 'hospital', 'donor', 'patient'].includes(data.role)) {
+            setUserRole(data.role as 'admin' | 'hospital' | 'donor' | 'patient');
+          }
+        }
+      }
+    };
+
+    fetchProfile();
+  }, [user]);
 
   // Mock data for different roles
   const getStatsForRole = () => {

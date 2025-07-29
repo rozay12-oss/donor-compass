@@ -1,17 +1,20 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
 import { Heart, Lock, User, Mail } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { signIn, signUp, user, loading } = useAuth();
   const [isLogin, setIsLogin] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -20,27 +23,70 @@ const Login = () => {
     fullName: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (user && !loading) {
+      navigate("/");
+    }
+  }, [user, loading, navigate]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
     
-    if (!isLogin && formData.password !== formData.confirmPassword) {
+    try {
+      if (!isLogin) {
+        // Sign up flow
+        if (formData.password !== formData.confirmPassword) {
+          toast({
+            title: "Password Mismatch",
+            description: "Please ensure passwords match",
+            variant: "destructive",
+          });
+          return;
+        }
+
+        if (!formData.role) {
+          toast({
+            title: "Role Required",
+            description: "Please select your role",
+            variant: "destructive",
+          });
+          return;
+        }
+
+        const { error } = await signUp(formData.email, formData.password, {
+          full_name: formData.fullName,
+          role: formData.role
+        });
+
+        if (!error) {
+          // Clear form on successful signup
+          setFormData({
+            email: "",
+            password: "",
+            confirmPassword: "",
+            role: "",
+            fullName: "",
+          });
+        }
+      } else {
+        // Sign in flow
+        const { error } = await signIn(formData.email, formData.password);
+        
+        if (!error) {
+          navigate("/");
+        }
+      }
+    } catch (error) {
       toast({
-        title: "Password Mismatch",
-        description: "Please ensure passwords match",
+        title: "Unexpected Error",
+        description: "Something went wrong. Please try again.",
         variant: "destructive",
       });
-      return;
+    } finally {
+      setIsSubmitting(false);
     }
-
-    toast({
-      title: isLogin ? "Login Successful" : "Registration Successful",
-      description: isLogin 
-        ? "Welcome back to the Blood Bank Management System" 
-        : "Your account has been created successfully",
-    });
-
-    // Simulate login/registration success
-    navigate("/");
   };
 
   return (
@@ -164,8 +210,9 @@ const Login = () => {
                 type="submit" 
                 className="w-full bg-gradient-primary text-white hover:opacity-90 transition-opacity"
                 size="lg"
+                disabled={isSubmitting}
               >
-                {isLogin ? "Sign In" : "Create Account"}
+                {isSubmitting ? "Please wait..." : (isLogin ? "Sign In" : "Create Account")}
               </Button>
             </form>
 

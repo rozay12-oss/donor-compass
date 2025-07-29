@@ -2,8 +2,9 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Heart, Menu, Bell, User, Search } from 'lucide-react';
+import { Heart, Menu, Bell, User, Search, LogOut } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '@/hooks/useAuth';
 
 interface HeaderProps {
   userRole: 'admin' | 'hospital' | 'donor' | 'patient';
@@ -13,6 +14,7 @@ interface HeaderProps {
 
 export const Header = ({ userRole, userName, onRoleChange }: HeaderProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { user, signOut } = useAuth();
 
   const roleColors = {
     admin: 'bg-gradient-primary',
@@ -68,9 +70,12 @@ export const Header = ({ userRole, userName, onRoleChange }: HeaderProps) => {
                 <Button variant="ghost" size="sm">Admin Panel</Button>
               </Link>
             )}
-            <Link to="/login">
-              <Button variant="ghost" size="sm">Login</Button>
-            </Link>
+            {user && (
+              <Button variant="ghost" size="sm" onClick={signOut}>
+                <LogOut className="h-4 w-4 mr-2" />
+                Sign Out
+              </Button>
+            )}
           </nav>
 
           {/* Right Side Actions */}
@@ -151,9 +156,12 @@ export const Header = ({ userRole, userName, onRoleChange }: HeaderProps) => {
                 <Button variant="ghost" size="sm" className="w-full justify-start">Admin Panel</Button>
               </Link>
             )}
-            <Link to="/login">
-              <Button variant="ghost" size="sm" className="w-full justify-start">Login</Button>
-            </Link>
+            {user && (
+              <Button variant="ghost" size="sm" className="w-full justify-start" onClick={signOut}>
+                <LogOut className="h-4 w-4 mr-2" />
+                Sign Out
+              </Button>
+            )}
             <div className="pt-2 border-t border-border">
               <select 
                 value={userRole}

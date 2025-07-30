@@ -102,7 +102,8 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
             description: 'Book your next donation appointment',
             icon: <Calendar className="h-5 w-5" />,
             color: 'bg-medical-success text-white',
-            action: 'schedule-donation'
+            action: 'schedule-donation',
+            link: '/schedule-donation'
           },
           {
             title: 'Update Profile',

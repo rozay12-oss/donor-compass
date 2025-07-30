@@ -17,6 +17,7 @@ import DonorPortal from "./pages/DonorPortal";
 import EmergencyRequests from "./pages/EmergencyRequests";
 import Reports from "./pages/Reports";
 import Profile from "./pages/Profile";
+import MyRequests from "./pages/MyRequests";
 
 const queryClient = new QueryClient();
 
@@ -39,6 +40,7 @@ const App = () => (
             <Route path="/emergency-requests" element={<ProtectedRoute><EmergencyRequests /></ProtectedRoute>} />
             <Route path="/reports" element={<ProtectedRoute><Reports /></ProtectedRoute>} />
             <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+            <Route path="/my-requests" element={<ProtectedRoute><MyRequests /></ProtectedRoute>} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

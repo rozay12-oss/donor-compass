@@ -8,12 +8,16 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Header } from "@/components/Header";
 import { useToast } from "@/hooks/use-toast";
-import { ArrowLeft, Clock, MapPin, Phone, AlertTriangle } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
+import { ArrowLeft, Clock, MapPin, Phone, AlertTriangle, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const BloodRequest = () => {
   const { toast } = useToast();
+  const { user } = useAuth();
   const [isEmergency, setIsEmergency] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     patientName: "",
     bloodType: "",
@@ -28,32 +32,83 @@ const BloodRequest = () => {
     additionalNotes: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    toast({
-      title: isEmergency ? "Emergency Request Submitted" : "Blood Request Submitted",
-      description: isEmergency 
-        ? "Emergency alert sent to all nearby donors and blood banks" 
-        : "Your request has been forwarded to available blood banks",
-      variant: isEmergency ? "destructive" : "default",
-    });
+    if (!user) {
+      toast({
+        title: "Authentication Required",
+        description: "Please log in to submit a blood request",
+        variant: "destructive",
+      });
+      return;
+    }
 
-    // Reset form
-    setFormData({
-      patientName: "",
-      bloodType: "",
-      unitsNeeded: "",
-      hospitalName: "",
-      doctorName: "",
-      contactNumber: "",
-      emergencyContact: "",
-      medicalCondition: "",
-      urgencyLevel: "",
-      expectedDate: "",
-      additionalNotes: "",
-    });
-    setIsEmergency(false);
+    setIsSubmitting(true);
+
+    try {
+      // Create blood request in database
+      const { error: requestError } = await supabase
+        .from('blood_requests')
+        .insert({
+          user_id: user.id,
+          blood_type: formData.bloodType,
+          quantity: parseInt(formData.unitsNeeded),
+          status: isEmergency ? 'urgent' : 'pending'
+        });
+
+      if (requestError) throw requestError;
+
+      // If emergency, also create emergency request
+      if (isEmergency) {
+        const { error: emergencyError } = await supabase
+          .from('emergency_requests')
+          .insert({
+            name: formData.patientName,
+            blood_type: formData.bloodType,
+            units: parseInt(formData.unitsNeeded),
+            location: formData.hospitalName,
+            contact: formData.contactNumber,
+            urgency: formData.urgencyLevel,
+            notes: `Medical Condition: ${formData.medicalCondition}. Doctor: ${formData.doctorName}. Emergency Contact: ${formData.emergencyContact}. ${formData.additionalNotes ? 'Additional Notes: ' + formData.additionalNotes : ''}`
+          });
+
+        if (emergencyError) throw emergencyError;
+      }
+
+      toast({
+        title: isEmergency ? "Emergency Request Submitted" : "Blood Request Submitted",
+        description: isEmergency 
+          ? "Emergency alert sent to all nearby donors and blood banks" 
+          : "Your request has been forwarded to available blood banks",
+        variant: isEmergency ? "destructive" : "default",
+      });
+
+      // Reset form
+      setFormData({
+        patientName: "",
+        bloodType: "",
+        unitsNeeded: "",
+        hospitalName: "",
+        doctorName: "",
+        contactNumber: "",
+        emergencyContact: "",
+        medicalCondition: "",
+        urgencyLevel: "",
+        expectedDate: "",
+        additionalNotes: "",
+      });
+      setIsEmergency(false);
+    } catch (error) {
+      console.error('Error submitting blood request:', error);
+      toast({
+        title: "Submission Failed",
+        description: "There was an error submitting your request. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -289,6 +344,7 @@ const BloodRequest = () => {
 
                 <Button 
                   type="submit" 
+                  disabled={isSubmitting}
                   className={`w-full text-white hover:opacity-90 transition-opacity ${
                     isEmergency 
                       ? 'bg-gradient-to-r from-destructive to-destructive/80' 
@@ -296,7 +352,14 @@ const BloodRequest = () => {
                   }`}
                   size="lg"
                 >
-                  {isEmergency ? "Submit Emergency Request" : "Submit Blood Request"}
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                      Submitting...
+                    </>
+                  ) : (
+                    isEmergency ? "Submit Emergency Request" : "Submit Blood Request"
+                  )}
                 </Button>
               </form>
             </CardContent>

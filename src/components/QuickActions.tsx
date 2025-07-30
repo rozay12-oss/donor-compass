@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
 import { 
   UserPlus, 
   Heart, 
@@ -17,6 +18,7 @@ interface QuickAction {
   icon: React.ReactNode;
   color: string;
   action: string;
+  link?: string;
 }
 
 interface QuickActionsProps {
@@ -65,7 +67,8 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
             description: 'Submit a new blood request',
             icon: <Heart className="h-5 w-5" />,
             color: 'bg-medical-info text-white',
-            action: 'request-blood'
+            action: 'request-blood',
+            link: '/blood-request'
           },
           {
             title: 'Check Availability',
@@ -79,14 +82,16 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
             description: 'Submit urgent blood requirement',
             icon: <AlertTriangle className="h-5 w-5" />,
             color: 'bg-medical-emergency text-white',
-            action: 'emergency-request'
+            action: 'emergency-request',
+            link: '/blood-request'
           },
           {
             title: 'Track Requests',
             description: 'Monitor your blood requests',
             icon: <Truck className="h-5 w-5" />,
             color: 'bg-medical-success text-white',
-            action: 'track-requests'
+            action: 'track-requests',
+            link: '/my-requests'
           }
         ];
         
@@ -132,25 +137,28 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
             action: 'find-blood'
           },
           {
-            title: 'Request Donation',
+            title: 'Request Blood',
             description: 'Submit a blood requirement request',
             icon: <FileText className="h-5 w-5" />,
             color: 'bg-gradient-primary text-white',
-            action: 'request-donation'
+            action: 'request-donation',
+            link: '/blood-request'
           },
           {
-            title: 'Find Donors',
-            description: 'Connect with compatible donors',
-            icon: <Users className="h-5 w-5" />,
+            title: 'My Requests',
+            description: 'Track your blood requests',
+            icon: <Truck className="h-5 w-5" />,
             color: 'bg-medical-success text-white',
-            action: 'find-donors'
+            action: 'my-requests',
+            link: '/my-requests'
           },
           {
             title: 'Emergency Help',
             description: 'Get immediate assistance',
             icon: <AlertTriangle className="h-5 w-5" />,
             color: 'bg-medical-emergency text-white',
-            action: 'emergency-help'
+            action: 'emergency-help',
+            link: '/blood-request'
           }
         ];
         
@@ -168,20 +176,39 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {actions.map((action, index) => (
-            <Button
-              key={index}
-              variant="outline"
-              className={`h-auto p-4 flex flex-col items-start space-y-2 hover:scale-105 transition-transform ${action.color} border-0 hover:opacity-90`}
-              onClick={() => console.log(`Action: ${action.action}`)}
-            >
-              <div className="flex items-center space-x-2 w-full">
-                {action.icon}
-                <h3 className="font-medium text-left">{action.title}</h3>
-              </div>
-              <p className="text-sm opacity-90 text-left">{action.description}</p>
-            </Button>
-          ))}
+          {actions.map((action, index) => {
+            if (action.link) {
+              return (
+                <Link key={index} to={action.link}>
+                  <Button
+                    variant="outline"
+                    className={`h-auto p-4 flex flex-col items-start space-y-2 hover:scale-105 transition-transform ${action.color} border-0 hover:opacity-90 w-full`}
+                  >
+                    <div className="flex items-center space-x-2 w-full">
+                      {action.icon}
+                      <h3 className="font-medium text-left">{action.title}</h3>
+                    </div>
+                    <p className="text-sm opacity-90 text-left">{action.description}</p>
+                  </Button>
+                </Link>
+              );
+            }
+            
+            return (
+              <Button
+                key={index}
+                variant="outline"
+                className={`h-auto p-4 flex flex-col items-start space-y-2 hover:scale-105 transition-transform ${action.color} border-0 hover:opacity-90`}
+                onClick={() => console.log(`Action: ${action.action}`)}
+              >
+                <div className="flex items-center space-x-2 w-full">
+                  {action.icon}
+                  <h3 className="font-medium text-left">{action.title}</h3>
+                </div>
+                <p className="text-sm opacity-90 text-left">{action.description}</p>
+              </Button>
+            );
+          })}
         </div>
       </CardContent>
     </Card>

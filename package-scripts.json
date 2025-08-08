@@ -1,0 +1,5 @@
+{
+  "scripts": {
+    "generate-pdf": "node generate-pdf.js"
+  }
+}

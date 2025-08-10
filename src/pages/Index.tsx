@@ -5,6 +5,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Link } from 'react-router-dom';
 import { StatsCard } from '@/components/StatsCard';
 import { BloodInventoryTable } from '@/components/BloodInventoryTable';
+import { BloodAvailabilityChecker } from '@/components/BloodAvailabilityChecker';
 import { RecentActivity } from '@/components/RecentActivity';
 import { QuickActions } from '@/components/QuickActions';
 import { 
@@ -238,7 +239,7 @@ const Index = () => {
           {/* Blood Inventory Table - Full width for admin, 2/3 for others */}
           <div className={userRole === 'admin' ? 'lg:col-span-2' : 'lg:col-span-2'}>
             {userRole === 'admin' && <BloodInventoryTable />}
-            {userRole !== 'admin' && <RecentActivity />}
+            {userRole !== 'admin' && <BloodAvailabilityChecker />}
           </div>
 
           {/* Side Panel */}
@@ -250,7 +251,8 @@ const Index = () => {
 
         {/* Admin-specific full-width content */}
         {userRole === 'admin' && (
-          <div className="mt-8">
+          <div className="mt-8 space-y-8">
+            <BloodAvailabilityChecker />
             <RecentActivity />
           </div>
         )}

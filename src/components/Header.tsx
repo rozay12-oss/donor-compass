@@ -5,6 +5,9 @@ import { Badge } from '@/components/ui/badge';
 import { Heart, Menu, Bell, User, Search, LogOut } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
+import { SearchDialog } from './SearchDialog';
+import { NotificationsDropdown } from './NotificationsDropdown';
+import { ProfileDropdown } from './ProfileDropdown';
 
 interface HeaderProps {
   userRole: 'admin' | 'hospital' | 'donor' | 'patient';
@@ -14,6 +17,7 @@ interface HeaderProps {
 
 export const Header = ({ userRole, userName, onRoleChange }: HeaderProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const { user, signOut } = useAuth();
 
   const roleColors = {
@@ -81,17 +85,16 @@ export const Header = ({ userRole, userName, onRoleChange }: HeaderProps) => {
           {/* Right Side Actions */}
           <div className="flex items-center space-x-4">
             {/* Search */}
-            <Button variant="ghost" size="sm">
+            <Button variant="ghost" size="sm" onClick={() => setSearchOpen(true)}>
               <Search className="h-4 w-4" />
             </Button>
 
             {/* Notifications */}
-            <Button variant="ghost" size="sm" className="relative">
-              <Bell className="h-4 w-4" />
-              <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 text-xs bg-medical-emergency text-white border-0">
-                3
-              </Badge>
-            </Button>
+            <NotificationsDropdown>
+              <Button variant="ghost" size="sm">
+                <Bell className="h-4 w-4" />
+              </Button>
+            </NotificationsDropdown>
 
             {/* Role Switcher */}
             <div className="hidden sm:block">
@@ -113,9 +116,11 @@ export const Header = ({ userRole, userName, onRoleChange }: HeaderProps) => {
                 <p className="text-sm font-medium text-foreground">{userName}</p>
                 <p className="text-xs text-muted-foreground">{roleLabels[userRole]}</p>
               </div>
-              <Button variant="ghost" size="sm">
-                <User className="h-4 w-4" />
-              </Button>
+              <ProfileDropdown userName={userName} userRole={userRole}>
+                <Button variant="ghost" size="sm">
+                  <User className="h-4 w-4" />
+                </Button>
+              </ProfileDropdown>
             </div>
 
             {/* Mobile Menu Button */}
@@ -177,6 +182,9 @@ export const Header = ({ userRole, userName, onRoleChange }: HeaderProps) => {
           </Card>
         )}
       </div>
+      
+      {/* Search Dialog */}
+      <SearchDialog open={searchOpen} onOpenChange={setSearchOpen} />
     </header>
   );
 };

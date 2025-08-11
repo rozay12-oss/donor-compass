@@ -29,11 +29,11 @@ const Index = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       if (user) {
-        const { data } = await supabase
+        const { data, error } = await supabase
           .from('profiles')
           .select('*')
           .eq('user_id', user.id)
-          .single();
+          .maybeSingle();
         
         if (data) {
           setProfile(data);
@@ -41,6 +41,10 @@ const Index = () => {
           if (data.role && ['admin', 'hospital', 'donor', 'patient'].includes(data.role)) {
             setUserRole(data.role as 'admin' | 'hospital' | 'donor' | 'patient');
           }
+        } else if (!error) {
+          // No profile found but no error - profile might not exist yet
+          setUserName(user.email || 'User');
+          setUserRole('donor'); // Default role
         }
       }
     };

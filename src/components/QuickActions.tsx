@@ -1,6 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Link } from 'react-router-dom';
+import { EligibilityChecker } from '@/components/EligibilityChecker';
 import { 
   UserPlus, 
   Heart, 
@@ -9,7 +11,8 @@ import {
   Calendar, 
   BarChart3,
   Users,
-  Truck
+  Truck,
+  UserCheck
 } from 'lucide-react';
 
 interface QuickAction {
@@ -192,6 +195,32 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
                     <p className="text-sm opacity-90 text-left">{action.description}</p>
                   </Button>
                 </Link>
+              );
+            }
+
+            // Special handling for eligibility check
+            if (action.action === 'eligibility-check') {
+              return (
+                <Dialog key={index}>
+                  <DialogTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className={`h-auto p-4 flex flex-col items-start space-y-2 hover:scale-105 transition-transform ${action.color} border-0 hover:opacity-90`}
+                    >
+                      <div className="flex items-center space-x-2 w-full">
+                        <UserCheck className="h-5 w-5" />
+                        <h3 className="font-medium text-left">{action.title}</h3>
+                      </div>
+                      <p className="text-sm opacity-90 text-left">{action.description}</p>
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+                    <DialogHeader>
+                      <DialogTitle>Eligibility Checker</DialogTitle>
+                    </DialogHeader>
+                    <EligibilityChecker />
+                  </DialogContent>
+                </Dialog>
               );
             }
             

@@ -49,11 +49,12 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
             action: 'manage-inventory'
           },
           {
-            title: 'User Management',
-            description: 'View, approve, and manage user accounts',
-            icon: <Users className="h-5 w-5" />,
+            title: 'Process Requests',
+            description: 'Review and approve blood requests',
+            icon: <FileText className="h-5 w-5" />,
             color: 'bg-medical-info text-white',
-            action: 'user-management'
+            action: 'process-requests',
+            link: '/process-blood-requests'
           },
           {
             title: 'Emergency Requests',

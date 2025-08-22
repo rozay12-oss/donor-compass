@@ -20,6 +20,7 @@ import Reports from "./pages/Reports";
 import Profile from "./pages/Profile";
 import MyRequests from "./pages/MyRequests";
 import { ScheduleDonation } from "./pages/ScheduleDonation";
+import ProcessBloodRequests from "./pages/ProcessBloodRequests";
 
 const queryClient = new QueryClient();
 
@@ -45,6 +46,7 @@ const App = () => (
             <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
             <Route path="/my-requests" element={<ProtectedRoute><MyRequests /></ProtectedRoute>} />
             <Route path="/schedule-donation" element={<ProtectedRoute><ScheduleDonation /></ProtectedRoute>} />
+            <Route path="/process-blood-requests" element={<ProtectedRoute><ProcessBloodRequests /></ProtectedRoute>} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

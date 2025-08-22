@@ -12,7 +12,15 @@ import {
   BarChart3,
   Users,
   Truck,
-  UserCheck
+  UserCheck,
+  Database,
+  Settings,
+  Shield,
+  Activity,
+  Package,
+  Clipboard,
+  Bell,
+  MapPin
 } from 'lucide-react';
 
 interface QuickAction {
@@ -34,32 +42,63 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
       case 'admin':
         return [
           {
-            title: 'Register New Donor',
-            description: 'Add a new blood donor to the system',
-            icon: <UserPlus className="h-5 w-5" />,
-            color: 'bg-medical-success text-white',
-            action: 'register-donor'
+            title: 'Manage Inventory',
+            description: 'Update blood stock levels and set capacity',
+            icon: <Database className="h-5 w-5" />,
+            color: 'bg-medical-primary text-white',
+            action: 'manage-inventory'
           },
           {
-            title: 'Process Blood Request',
-            description: 'Handle incoming blood requests',
-            icon: <Heart className="h-5 w-5" />,
+            title: 'User Management',
+            description: 'View, approve, and manage user accounts',
+            icon: <Users className="h-5 w-5" />,
             color: 'bg-medical-info text-white',
-            action: 'process-request'
+            action: 'user-management'
           },
           {
-            title: 'Generate Report',
-            description: 'Create inventory and activity reports',
-            icon: <BarChart3 className="h-5 w-5" />,
-            color: 'bg-gradient-primary text-white',
-            action: 'generate-report'
-          },
-          {
-            title: 'Emergency Alert',
-            description: 'Send urgent blood requests to donors',
+            title: 'Emergency Requests',
+            description: 'Monitor and respond to urgent blood needs',
             icon: <AlertTriangle className="h-5 w-5" />,
             color: 'bg-medical-emergency text-white',
-            action: 'emergency-alert'
+            action: 'emergency-requests',
+            link: '/emergency-requests'
+          },
+          {
+            title: 'Reports & Analytics',
+            description: 'Generate comprehensive system reports',
+            icon: <BarChart3 className="h-5 w-5" />,
+            color: 'bg-gradient-primary text-white',
+            action: 'reports-analytics',
+            link: '/reports'
+          },
+          {
+            title: 'Donor Registration',
+            description: 'Register new blood donors',
+            icon: <UserPlus className="h-5 w-5" />,
+            color: 'bg-medical-success text-white',
+            action: 'donor-registration',
+            link: '/donor-registration'
+          },
+          {
+            title: 'System Security',
+            description: 'Monitor security and access controls',
+            icon: <Shield className="h-5 w-5" />,
+            color: 'bg-medical-warning text-white',
+            action: 'system-security'
+          },
+          {
+            title: 'Blood Notifications',
+            description: 'Send alerts and notifications to users',
+            icon: <Bell className="h-5 w-5" />,
+            color: 'bg-medical-accent text-white',
+            action: 'notifications'
+          },
+          {
+            title: 'Activity Monitor',
+            description: 'Track system activity and usage',
+            icon: <Activity className="h-5 w-5" />,
+            color: 'bg-medical-secondary text-white',
+            action: 'activity-monitor'
           }
         ];
         

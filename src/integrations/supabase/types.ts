@@ -7,67 +7,13 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instanciate createClient with right options
+  // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: "13.0.4"
   }
   public: {
     Tables: {
-      alerts: {
-        Row: {
-          id: string
-          message: string
-          severity: string | null
-          timestamp: string | null
-        }
-        Insert: {
-          id?: string
-          message: string
-          severity?: string | null
-          timestamp?: string | null
-        }
-        Update: {
-          id?: string
-          message?: string
-          severity?: string | null
-          timestamp?: string | null
-        }
-        Relationships: []
-      }
-      appointments: {
-        Row: {
-          appointment_date: string
-          appointment_time: string
-          created_at: string
-          donor_id: string
-          id: string
-          notes: string | null
-          status: string
-          updated_at: string
-        }
-        Insert: {
-          appointment_date: string
-          appointment_time: string
-          created_at?: string
-          donor_id: string
-          id?: string
-          notes?: string | null
-          status?: string
-          updated_at?: string
-        }
-        Update: {
-          appointment_date?: string
-          appointment_time?: string
-          created_at?: string
-          donor_id?: string
-          id?: string
-          notes?: string | null
-          status?: string
-          updated_at?: string
-        }
-        Relationships: []
-      }
       blood_inventory: {
         Row: {
           blood_type: string
@@ -116,93 +62,6 @@ export type Database = {
           quantity?: number
           status?: string | null
           user_id?: string | null
-        }
-        Relationships: []
-      }
-      donations: {
-        Row: {
-          blood_type: string | null
-          donation_date: string | null
-          donor_id: string | null
-          id: number
-          units: number | null
-        }
-        Insert: {
-          blood_type?: string | null
-          donation_date?: string | null
-          donor_id?: string | null
-          id?: number
-          units?: number | null
-        }
-        Update: {
-          blood_type?: string | null
-          donation_date?: string | null
-          donor_id?: string | null
-          id?: number
-          units?: number | null
-        }
-        Relationships: []
-      }
-      donors: {
-        Row: {
-          address: string
-          blood_group: string
-          contact: string
-          created_at: string | null
-          id: string
-          name: string
-        }
-        Insert: {
-          address: string
-          blood_group: string
-          contact: string
-          created_at?: string | null
-          id?: string
-          name: string
-        }
-        Update: {
-          address?: string
-          blood_group?: string
-          contact?: string
-          created_at?: string | null
-          id?: string
-          name?: string
-        }
-        Relationships: []
-      }
-      emergency_requests: {
-        Row: {
-          blood_type: string
-          contact: string
-          created_at: string | null
-          id: string
-          location: string
-          name: string
-          notes: string | null
-          units: number
-          urgency: string
-        }
-        Insert: {
-          blood_type: string
-          contact: string
-          created_at?: string | null
-          id?: string
-          location: string
-          name: string
-          notes?: string | null
-          units: number
-          urgency: string
-        }
-        Update: {
-          blood_type?: string
-          contact?: string
-          created_at?: string | null
-          id?: string
-          location?: string
-          name?: string
-          notes?: string | null
-          units?: number
-          urgency?: string
         }
         Relationships: []
       }

@@ -59,22 +59,7 @@ const BloodRequest = () => {
 
       if (requestError) throw requestError;
 
-      // If emergency, also create emergency request
-      if (isEmergency) {
-        const { error: emergencyError } = await supabase
-          .from('emergency_requests')
-          .insert({
-            name: formData.patientName,
-            blood_type: formData.bloodType,
-            units: parseInt(formData.unitsNeeded),
-            location: formData.hospitalName,
-            contact: formData.contactNumber,
-            urgency: formData.urgencyLevel,
-            notes: `Medical Condition: ${formData.medicalCondition}. Doctor: ${formData.doctorName}. Emergency Contact: ${formData.emergencyContact}. ${formData.additionalNotes ? 'Additional Notes: ' + formData.additionalNotes : ''}`
-          });
-
-        if (emergencyError) throw emergencyError;
-      }
+      // Emergency requests now just use 'urgent' status in blood_requests table
 
       toast({
         title: isEmergency ? "Emergency Request Submitted" : "Blood Request Submitted",
@@ -114,8 +99,8 @@ const BloodRequest = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-accent/20">
       <Header 
-        userRole="hospital" 
-        userName="Dr. Smith" 
+        userRole="donor" 
+        userName="User" 
         onRoleChange={() => {}} 
       />
       

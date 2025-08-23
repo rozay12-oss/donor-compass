@@ -10,9 +10,9 @@ import { NotificationsDropdown } from './NotificationsDropdown';
 import { ProfileDropdown } from './ProfileDropdown';
 
 interface HeaderProps {
-  userRole: 'admin' | 'hospital' | 'donor' | 'patient';
+  userRole: 'admin' | 'donor';
   userName: string;
-  onRoleChange: (role: 'admin' | 'hospital' | 'donor' | 'patient') => void;
+  onRoleChange: (role: 'admin' | 'donor') => void;
 }
 
 export const Header = ({ userRole, userName, onRoleChange }: HeaderProps) => {
@@ -22,16 +22,12 @@ export const Header = ({ userRole, userName, onRoleChange }: HeaderProps) => {
 
   const roleColors = {
     admin: 'bg-gradient-primary',
-    hospital: 'bg-medical-info',
-    donor: 'bg-medical-success',
-    patient: 'bg-medical-warning'
+    donor: 'bg-medical-success'
   };
 
   const roleLabels = {
     admin: 'Blood Bank Admin',
-    hospital: 'Hospital Staff',
-    donor: 'Blood Donor',
-    patient: 'Patient'
+    donor: 'Blood Donor'
   };
 
   return (
@@ -54,21 +50,12 @@ export const Header = ({ userRole, userName, onRoleChange }: HeaderProps) => {
             <Link to="/">
               <Button variant="ghost" size="sm">Dashboard</Button>
             </Link>
-            {userRole === 'donor' && (
-              <Link to="/donor-registration">
-                <Button variant="ghost" size="sm">Register</Button>
-              </Link>
-            )}
-            {(userRole === 'hospital' || userRole === 'patient') && (
-              <Link to="/blood-request">
-                <Button variant="ghost" size="sm">Request Blood</Button>
-              </Link>
-            )}
-            {userRole === 'patient' && (
-              <Link to="/patient-portal">
-                <Button variant="ghost" size="sm">My Portal</Button>
-              </Link>
-            )}
+            <Link to="/blood-request">
+              <Button variant="ghost" size="sm">Request Blood</Button>
+            </Link>
+            <Link to="/my-requests">
+              <Button variant="ghost" size="sm">My Requests</Button>
+            </Link>
             {userRole === 'admin' && (
               <Link to="/admin-dashboard">
                 <Button variant="ghost" size="sm">Admin Panel</Button>
@@ -104,9 +91,7 @@ export const Header = ({ userRole, userName, onRoleChange }: HeaderProps) => {
                 className="text-sm border border-border rounded-md px-3 py-1 bg-background"
               >
                 <option value="admin">Admin</option>
-                <option value="hospital">Hospital</option>
                 <option value="donor">Donor</option>
-                <option value="patient">Patient</option>
               </select>
             </div>
 
@@ -141,21 +126,12 @@ export const Header = ({ userRole, userName, onRoleChange }: HeaderProps) => {
             <Link to="/">
               <Button variant="ghost" size="sm" className="w-full justify-start">Dashboard</Button>
             </Link>
-            {userRole === 'donor' && (
-              <Link to="/donor-registration">
-                <Button variant="ghost" size="sm" className="w-full justify-start">Register</Button>
-              </Link>
-            )}
-            {(userRole === 'hospital' || userRole === 'patient') && (
-              <Link to="/blood-request">
-                <Button variant="ghost" size="sm" className="w-full justify-start">Request Blood</Button>
-              </Link>
-            )}
-            {userRole === 'patient' && (
-              <Link to="/patient-portal">
-                <Button variant="ghost" size="sm" className="w-full justify-start">My Portal</Button>
-              </Link>
-            )}
+            <Link to="/blood-request">
+              <Button variant="ghost" size="sm" className="w-full justify-start">Request Blood</Button>
+            </Link>
+            <Link to="/my-requests">
+              <Button variant="ghost" size="sm" className="w-full justify-start">My Requests</Button>
+            </Link>
             {userRole === 'admin' && (
               <Link to="/admin-dashboard">
                 <Button variant="ghost" size="sm" className="w-full justify-start">Admin Panel</Button>
@@ -174,9 +150,7 @@ export const Header = ({ userRole, userName, onRoleChange }: HeaderProps) => {
                 className="w-full text-sm border border-border rounded-md px-3 py-2 bg-background"
               >
                 <option value="admin">Blood Bank Admin</option>
-                <option value="hospital">Hospital Staff</option>
                 <option value="donor">Blood Donor</option>
-                <option value="patient">Patient</option>
               </select>
             </div>
           </Card>

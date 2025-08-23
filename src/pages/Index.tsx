@@ -21,7 +21,7 @@ import {
 
 const Index = () => {
   const { user } = useAuth();
-  const [userRole, setUserRole] = useState<'admin' | 'hospital' | 'donor' | 'patient'>('donor');
+  const [userRole, setUserRole] = useState<'admin' | 'donor'>('donor');
   const [userName, setUserName] = useState('Guest User');
   const [profile, setProfile] = useState<any>(null);
 
@@ -38,8 +38,8 @@ const Index = () => {
         if (data) {
           setProfile(data);
           setUserName(data.full_name || user.email || 'User');
-          if (data.role && ['admin', 'hospital', 'donor', 'patient'].includes(data.role)) {
-            setUserRole(data.role as 'admin' | 'hospital' | 'donor' | 'patient');
+          if (data.role && ['admin', 'donor'].includes(data.role)) {
+            setUserRole(data.role as 'admin' | 'donor');
           }
         } else if (!error) {
           // No profile found but no error - profile might not exist yet
@@ -88,98 +88,35 @@ const Index = () => {
             status: 'emergency' as const
           }
         ];
-      case 'hospital':
-        return [
-          {
-            title: 'My Requests',
-            value: '7',
-            subtitle: 'Active blood requests',
-            icon: Heart,
-            status: 'info' as const
-          },
-          {
-            title: 'Fulfilled Today',
-            value: '12',
-            subtitle: 'Units received',
-            icon: CheckCircle,
-            trend: { value: 5, isPositive: true },
-            status: 'success' as const
-          },
-          {
-            title: 'Pending Approval',
-            value: '3',
-            subtitle: 'Awaiting blood bank approval',
-            icon: Clock,
-            status: 'warning' as const
-          },
-          {
-            title: 'Emergency Stock',
-            value: '45',
-            subtitle: 'Units in emergency reserve',
-            icon: AlertTriangle,
-            status: 'info' as const
-          }
-        ];
       case 'donor':
         return [
           {
-            title: 'Total Donations',
-            value: '23',
-            subtitle: 'Lifetime contributions',
+            title: 'My Requests',
+            value: '2',
+            subtitle: 'Blood requests made',
             icon: Heart,
             trend: { value: 1, isPositive: true },
             status: 'success' as const
           },
           {
-            title: 'Lives Saved',
-            value: '69',
-            subtitle: 'Estimated impact',
-            icon: Users,
+            title: 'Available Units',
+            value: '127',
+            subtitle: 'Total blood units in stock',
+            icon: Droplets,
             status: 'success' as const
           },
           {
             title: 'Next Eligible',
             value: '45',
-            subtitle: 'Days until next donation',
+            subtitle: 'Days until next request',
             icon: Calendar,
             status: 'info' as const
           },
           {
-            title: 'Compatibility',
-            value: 'O+',
+            title: 'Blood Type',
+            value: profile?.blood_type || 'Unknown',
             subtitle: 'Your blood type',
             icon: Droplets,
-            status: 'info' as const
-          }
-        ];
-      case 'patient':
-        return [
-          {
-            title: 'Compatible Donors',
-            value: '127',
-            subtitle: 'Matching your blood type',
-            icon: Users,
-            status: 'success' as const
-          },
-          {
-            title: 'Available Units',
-            value: '45',
-            subtitle: 'Your blood type in stock',
-            icon: Droplets,
-            status: 'success' as const
-          },
-          {
-            title: 'My Requests',
-            value: '2',
-            subtitle: 'Active requests',
-            icon: Heart,
-            status: 'warning' as const
-          },
-          {
-            title: 'Response Time',
-            value: '2.3h',
-            subtitle: 'Average fulfillment time',
-            icon: Clock,
             status: 'info' as const
           }
         ];
@@ -210,9 +147,7 @@ const Index = () => {
                 <h1 className="text-3xl font-bold">Welcome back, {userName}</h1>
                 <p className="text-white/90">
                   {userRole === 'admin' && 'Managing blood bank operations efficiently'}
-                  {userRole === 'hospital' && 'Access blood inventory and submit requests'}
-                  {userRole === 'donor' && 'Thank you for saving lives through donation'}
-                  {userRole === 'patient' && 'Find the blood support you need'}
+                  {userRole === 'donor' && 'Access blood inventory and submit requests when needed'}
                 </p>
               </div>
             </div>

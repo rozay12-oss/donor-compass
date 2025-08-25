@@ -12,9 +12,10 @@ import { Link, useNavigate } from "react-router-dom";
 const Login = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
-  const { signIn, signUp, user, loading } = useAuth();
+  const { signIn, signUp, resetPassword, user, loading } = useAuth();
   const [isLogin, setIsLogin] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -86,6 +87,26 @@ const Login = () => {
       });
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleForgotPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.email) {
+      toast({
+        title: "Email Required",
+        description: "Please enter your email address",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+    const { error } = await resetPassword(formData.email);
+    setIsSubmitting(false);
+    
+    if (!error) {
+      setShowForgotPassword(false);
     }
   };
 
@@ -215,12 +236,58 @@ const Login = () => {
               </Button>
             </form>
 
-            {isLogin && (
+            {isLogin && !showForgotPassword && (
               <div className="text-center">
-                <Link to="#" className="text-sm text-primary hover:underline">
+                <button
+                  type="button"
+                  onClick={() => setShowForgotPassword(true)}
+                  className="text-sm text-primary hover:underline"
+                >
                   Forgot your password?
-                </Link>
+                </button>
               </div>
+            )}
+
+            {showForgotPassword && (
+              <form onSubmit={handleForgotPassword} className="space-y-4 border-t pt-4">
+                <div className="text-center">
+                  <h3 className="text-lg font-medium">Reset Password</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Enter your email to receive a reset link
+                  </p>
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="reset-email">Email</Label>
+                  <Input
+                    id="reset-email"
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    required
+                    className="bg-background/50"
+                    placeholder="Enter your email"
+                  />
+                </div>
+
+                <div className="flex gap-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => setShowForgotPassword(false)}
+                    className="flex-1"
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="flex-1"
+                  >
+                    {isSubmitting ? "Sending..." : "Send Reset Link"}
+                  </Button>
+                </div>
+              </form>
             )}
 
             <div className="text-center text-sm text-muted-foreground">

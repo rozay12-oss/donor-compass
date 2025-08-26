@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
+import { toast } from "@/components/ui/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { Heart, Lock, User, Mail, Eye, EyeOff } from "lucide-react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";

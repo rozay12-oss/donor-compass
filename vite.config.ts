@@ -18,6 +18,6 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  // 👇 Add this so GitHub Pages knows your repo base path
+  
   base: "/donor-compass/",
 }));

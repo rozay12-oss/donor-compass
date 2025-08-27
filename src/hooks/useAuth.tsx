@@ -29,7 +29,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setSession(session);
         setUser(session?.user ?? null);
         setLoading(false);
-        
+
         if (event === 'SIGNED_IN') {
           toast({
             title: "Welcome!",
@@ -51,7 +51,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const signUp = async (email: string, password: string, metadata?: any) => {
     const redirectUrl = `${window.location.origin}/`;
-    
+
     const { error } = await supabase.auth.signUp({
       email,
       password,
@@ -60,7 +60,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         data: metadata
       }
     });
-    
+
     if (error) {
       toast({
         title: "Sign Up Error",
@@ -80,13 +80,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       } catch (emailError) {
         console.error('Failed to send registration email:', emailError);
       }
-      
+
       toast({
         title: "Check your email!",
         description: "We've sent you a confirmation link and welcome email.",
       });
     }
-    
+
     return { error };
   };
 
@@ -95,7 +95,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       email,
       password,
     });
-    
+
     if (error) {
       toast({
         title: "Sign In Error",
@@ -103,7 +103,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         variant: "destructive",
       });
     }
-    
+
     return { error };
   };
 
@@ -125,11 +125,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const resetPassword = async (email: string) => {
     const redirectUrl = `${window.location.origin}/login?reset=true`;
-    
+
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: redirectUrl
     });
-    
+
     if (error) {
       toast({
         title: "Reset Password Error",
@@ -142,7 +142,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         description: "We've sent you a password reset link.",
       });
     }
-    
+
     return { error };
   };
 
@@ -150,7 +150,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const { error } = await supabase.auth.updateUser({
       password: newPassword
     });
-    
+
     if (error) {
       toast({
         title: "Update Password Error",
@@ -163,7 +163,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         description: "Your password has been successfully updated.",
       });
     }
-    
+
     return { error };
   };
 

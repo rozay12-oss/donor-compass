@@ -14,8 +14,8 @@ export const SearchDialog = ({ open, onOpenChange }: SearchDialogProps) => {
   const [searchTerm, setSearchTerm] = useState('');
 
   const searchResults = [
-    { type: 'donor', title: 'John Doe (O+)', subtitle: 'Available donor', icon: User, link: '/donor-portal' },
-    { type: 'hospital', title: 'City Hospital', subtitle: 'Active requests: 3', icon: Building2, link: '/hospital-portal' },
+    { type: 'donor', title: 'osei kelvin (O+)', subtitle: 'Available donor', icon: User, link: '/donor-portal' },
+    { type: 'hospital', title: 'Morro Hospital', subtitle: 'Active requests: 3', icon: Building2, link: '/hospital-portal' },
     { type: 'request', title: 'Emergency Request #1234', subtitle: 'A+ Blood needed urgently', icon: Heart, link: '/emergency-requests' },
     { type: 'report', title: 'Monthly Donation Report', subtitle: 'January 2024', icon: FileText, link: '/reports' },
   ].filter(item => 
